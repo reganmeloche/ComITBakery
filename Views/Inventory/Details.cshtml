@@ -1,0 +1,28 @@
+﻿@model InventoryItem
+
+<h3>Inventory Item</h3>
+<hr/>
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+
+        <dt class="col-sm-3">Price</dt>
+        <dd class="col-sm-9">@Model.Price</dd>
+
+        <dt class="col-sm-3">Days to Sell</dt>
+        <dd class="col-sm-9">@Model.DaysToSell</dd>
+    </dl>
+    
+    <a asp-action="Update" asp-route-id="@Model.Id">Update</a> 
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="@Model.Id">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    <a asp-controller="Batch" asp-action="Create" asp-route-id="@Model.Id">New Batch</a>
+
+</div>
+

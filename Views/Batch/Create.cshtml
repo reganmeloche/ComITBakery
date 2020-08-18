@@ -1,0 +1,21 @@
+﻿@model Batch
+
+@{
+    var f = Model.Id;
+}
+<h3>New Batch</h3>
+<hr/>
+<form asp-action="Create">
+    <input type="hidden" asp-for="InventoryItemId"/>
+    <div class="form-group">
+        <label asp-for="InitialQuantity">Quantity</label>
+        <input type="text" class="form-control" asp-for="InitialQuantity"/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProductionDate">Production Date</label>
+        <input type="date" class="form-control" asp-for="ProductionDate"/>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create Batch</button>
+</form>

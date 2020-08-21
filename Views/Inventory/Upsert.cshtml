@@ -12,7 +12,10 @@
     }
 }
 
-<h3>@title</h3>
+<div>
+    <h3 style="display:inline">@title</h3>
+    <a class="btn btn-primary" asp-action="Index" style="float:right">Back</a>
+</div>
 <hr/>
 <form asp-action="@aspAction">
     <input type="hidden" asp-for="Id"/>

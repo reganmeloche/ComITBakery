@@ -7,10 +7,12 @@ namespace ComITBakery.DAL
 {
     public interface IStoreBatches
     {
+        Batch GetBatch(Guid inventoryItemId, Guid batchId);
+
         void CreateBatch(Batch batchToCreate);
 
         void UpdateBatch(Batch batchToUpdate);
 
-        void DeleteBatch(Guid id);
+        void DeleteBatch(Guid inventoryItemId, Guid id);
     }
 }

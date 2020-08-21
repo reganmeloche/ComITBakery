@@ -1,9 +1,9 @@
 ﻿@model Batch
 
-@{
-    var f = Model.Id;
-}
-<h3>New Batch</h3>
+<div>
+    <h3 style="display:inline">Create Batch</h3>
+    <a class="btn btn-primary" asp-controller="Inventory" asp-action="Details" asp-route-id="@Model.InventoryItemId" style="float:right">Back</a>
+</div>
 <hr/>
 <form asp-action="Create">
     <input type="hidden" asp-for="InventoryItemId"/>
@@ -14,7 +14,7 @@
 
     <div class="form-group">
         <label asp-for="ProductionDate">Production Date</label>
-        <input type="date" class="form-control" asp-for="ProductionDate"/>
+        <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" asp-for="ProductionDate"/>
     </div>
 
     <button type="submit" class="btn btn-success">Create Batch</button>

@@ -30,18 +30,26 @@ namespace ComITBakery
         {
             services.AddControllersWithViews();
 
-            string connectionString = "";
+            string connectionString = Configuration.GetConnectionString("DefaultDB");
 
             services.AddDbContext<BakeryContext>(options => options.UseNpgsql(connectionString));
 
             services.AddScoped<IStoreInventoryItems, EFInventoryItemStorage>();
             services.AddScoped<IStoreBatches, EFBatchStorage>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Apply migrations
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<BakeryContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

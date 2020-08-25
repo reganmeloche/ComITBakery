@@ -6,23 +6,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ComITBakery.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 using ComITBakery.DAL;
 
 namespace ComITBakery.Controllers
 {
+    [Authorize]
     public class InventoryController : Controller
     {
         IStoreInventoryItems _inventoryStorage;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public InventoryController(IStoreInventoryItems myInventoryStorage)
+        public InventoryController(IStoreInventoryItems myInventoryStorage, UserManager<IdentityUser> userManager)
         {
             _inventoryStorage = myInventoryStorage;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
-            var items = _inventoryStorage.GetAllItems();
+            var items = _inventoryStorage.GetAllItems(UserId());
             return View(items);
         }
 
@@ -40,6 +45,7 @@ namespace ComITBakery.Controllers
             newItem.Id = Guid.NewGuid();
             newItem.Batches = new List<Batch>();
             newItem.IsDeleted = false;
+            newItem.UserId = UserId();
             _inventoryStorage.CreateInventoryItem(newItem);
             return RedirectToAction("Index");
         }
@@ -52,6 +58,7 @@ namespace ComITBakery.Controllers
 
         [HttpPost]
         public IActionResult Update(InventoryItem itemToUpdate) {
+            itemToUpdate.UserId = UserId();
             _inventoryStorage.UpdateInventoryItem(itemToUpdate);
             return RedirectToAction("Index"); 
         }
@@ -67,6 +74,11 @@ namespace ComITBakery.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private Guid UserId() {
+            var userId = _userManager.GetUserId(User);
+            return Guid.Parse(userId);
         }
     }
 }

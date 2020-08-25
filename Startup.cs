@@ -1,16 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.AspNetCore.Identity;
 
 using ComITBakery.DAL;
 
@@ -29,10 +25,14 @@ namespace ComITBakery
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
 
             string connectionString = Configuration.GetConnectionString("DefaultDB");
 
             services.AddDbContext<BakeryContext>(options => options.UseNpgsql(connectionString));
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<BakeryContext>();
 
             services.AddScoped<IStoreInventoryItems, EFInventoryItemStorage>();
             services.AddScoped<IStoreBatches, EFBatchStorage>();
@@ -65,6 +65,7 @@ namespace ComITBakery
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -72,6 +73,7 @@ namespace ComITBakery
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Inventory}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

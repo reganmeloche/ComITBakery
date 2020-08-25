@@ -6,6 +6,7 @@ namespace ComITBakery.Models
     public class InventoryItem
     {
         public Guid Id { get; set; }
+        public Guid UserId {get;set;} // Every item is attached to a user
         public string Name { get; set; }
         public string Description {get;set;}
         public decimal Price {get;set;}

@@ -8,7 +8,7 @@ namespace ComITBakery.DAL
 {
     public interface IStoreInventoryItems
     {
-        List<InventoryItem> GetAllItems();
+        List<InventoryItem> GetAllItems(Guid userId);
 
         InventoryItem GetById(Guid id);
 

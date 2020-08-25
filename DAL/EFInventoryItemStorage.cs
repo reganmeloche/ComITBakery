@@ -16,10 +16,10 @@ namespace ComITBakery.DAL
             _context = myContext;
         }
 
-        public List<InventoryItem> GetAllItems() {
+        public List<InventoryItem> GetAllItems(Guid userId) {
             var result = _context.Items
                 .Include(x => x.Batches)
-                .Where(x => x.IsDeleted == false)
+                .Where(x => x.IsDeleted == false && x.UserId == userId)
                 .ToList();
             return result;
         }
